@@ -1,0 +1,54 @@
+
+library(tidyverse)
+library(lubridate)
+library(cmocean)
+library(interp)
+library(patchwork)
+
+load("Virtual_Mooring.RData")
+load("SeaHorse_CTD_data.RData")
+
+
+pTmp_VM <- ggplot() +
+  geom_tile(data=data_tibble, aes(DateTime, WaterDepth, fill = Temperature)) +
+  scale_fill_cmocean(name = "thermal", limits=c(-1.9,0.5), breaks = c(-1.5, -1.0, -0.5, 0.0, 0.5)) +
+  labs(x=NULL,y="Depth (m)") +
+  guides(fill = guide_colourbar(direction = "horizontal", title.position = "top", title=expression("Temperature (\u00B0C)"))) +
+  #  scale_x_continuous(labels = NULL, limits = c(as.POSIXct("2012-01-21", tz = "UTC"), as.POSIXct("2012-01-27", tz = "UTC"))) +
+  scale_x_continuous(breaks = c(as.POSIXct("2012-01-22", tz = "UTC"), as.POSIXct("2012-01-23", tz = "UTC"), as.POSIXct("2012-01-24", tz = "UTC"), as.POSIXct("2012-01-25", tz = "UTC"), as.POSIXct("2012-01-26", tz = "UTC")),
+                     labels = c("Jan 22", "Jan 23", "Jan 24", "Jan 25", "Jan 26"), limits = c(as.POSIXct("2012-01-21 04:00:00", tz = "UTC"), as.POSIXct("2012-01-26 21:00:00", tz = "UTC"))) +
+  scale_y_continuous(limits = c(-200, 0), breaks = c(-200, -150, -100, -50, 0), labels = c("200", "150", "100", "50", "0"))
+
+pSal_VM <- ggplot() +
+  geom_tile(data=data_tibble, aes(DateTime, WaterDepth, fill = Salinity)) +
+  scale_fill_cmocean(name = "haline", limits=c(34.2,34.75), breaks = c(34.25, 34.5, 34.75)) +
+  labs(x=NULL,y="Depth (m)") +
+  guides(fill = guide_colourbar(direction = "horizontal", title.position = "top", title=expression("Salinity"))) +
+  #  scale_x_continuous(labels = NULL, limits = c(as.POSIXct("2012-01-21", tz = "UTC"), as.POSIXct("2012-01-27", tz = "UTC"))) +
+  scale_x_continuous(breaks = c(as.POSIXct("2012-01-22", tz = "UTC"), as.POSIXct("2012-01-23", tz = "UTC"), as.POSIXct("2012-01-24", tz = "UTC"), as.POSIXct("2012-01-25", tz = "UTC"), as.POSIXct("2012-01-26", tz = "UTC")),
+                     labels = c("Jan 22", "Jan 23", "Jan 24", "Jan 25", "Jan 26"), limits = c(as.POSIXct("2012-01-21 04:00:00", tz = "UTC"), as.POSIXct("2012-01-26 21:00:00", tz = "UTC"))) +
+  scale_y_continuous(limits = c(-200, 0), breaks = c(-200, -150, -100, -50, 0), labels = c("200", "150", "100", "50", "0"))
+
+pTmp <- ggplot(tidy_SH, aes(Time, Pressure)) +
+  geom_tile(aes(fill = Temperature)) +
+  scale_fill_cmocean(name = "thermal", limits=c(-1.9,0.5), breaks = c(-1.5, -1.0, -0.5, 0.0, 0.5)) +
+  scale_y_reverse() +
+  labs(x=NULL,y="Depth (m)") +
+  guides(fill = guide_colourbar(direction = "horizontal", title.position = "top", title=expression("Temperature (\u00B0C)"))) +
+  scale_x_continuous(breaks = c(as.POSIXct("2012-01-22", tz = "UTC"), as.POSIXct("2012-01-23", tz = "UTC"), as.POSIXct("2012-01-24", tz = "UTC"), as.POSIXct("2012-01-25", tz = "UTC"), as.POSIXct("2012-01-26", tz = "UTC")),
+                     labels = c("Jan 22", "Jan 23", "Jan 24", "Jan 25", "Jan 26"), limits = c(as.POSIXct("2012-01-21 04:00:00", tz = "UTC"), as.POSIXct("2012-01-26 21:00:00", tz = "UTC")))
+
+pSal <- ggplot(tidy_SH, aes(Time, Pressure)) +
+  geom_tile(aes(fill = Salinity)) +
+  scale_fill_cmocean(name = "haline", limits=c(34.2,34.75), breaks = c(34.25, 34.5, 34.75)) +
+  scale_y_reverse() +
+  labs(x=NULL,y="Depth (m)") +
+  guides(fill = guide_colourbar(direction = "horizontal", title.position = "top", title=expression("Salinity"))) +
+  scale_x_continuous(breaks = c(as.POSIXct("2012-01-22", tz = "UTC"), as.POSIXct("2012-01-23", tz = "UTC"), as.POSIXct("2012-01-24", tz = "UTC"), as.POSIXct("2012-01-25", tz = "UTC"), as.POSIXct("2012-01-26", tz = "UTC")),
+                     labels = c("Jan 22", "Jan 23", "Jan 24", "Jan 25", "Jan 26"), limits = c(as.POSIXct("2012-01-21 04:00:00", tz = "UTC"), as.POSIXct("2012-01-26 21:00:00", tz = "UTC")))
+
+
+# facet plot using patchwork package
+# pTmp/pTmp_VM/pSal/pSal_VM
+
+# ggsave(filename = "SH_VM_CTD.png", device = "png", scale = 1, width = 6, height = 6, units = "in", dpi = 1200)

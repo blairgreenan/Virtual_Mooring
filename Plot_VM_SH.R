@@ -45,7 +45,8 @@ pSal <- ggplot(tidy_SH, aes(Time, Pressure)) +
   labs(x=NULL,y="Depth (m)") +
   guides(fill = guide_colourbar(direction = "horizontal", title.position = "top", title=expression("Salinity"))) +
   scale_x_continuous(breaks = c(as.POSIXct("2012-01-22", tz = "UTC"), as.POSIXct("2012-01-23", tz = "UTC"), as.POSIXct("2012-01-24", tz = "UTC"), as.POSIXct("2012-01-25", tz = "UTC"), as.POSIXct("2012-01-26", tz = "UTC")),
-                     labels = c("Jan 22", "Jan 23", "Jan 24", "Jan 25", "Jan 26"), limits = c(as.POSIXct("2012-01-21 04:00:00", tz = "UTC"), as.POSIXct("2012-01-26 21:00:00", tz = "UTC")))
+                     labels = c("Jan 22", "Jan 23", "Jan 24", "Jan 25", "Jan 26"), limits = c(as.POSIXct("2012-01-21 04:00:00", tz = "UTC"), as.POSIXct("2012-01-26 21:00:00", tz = "UTC"))) +
+  geom_smooth(data=tidy_MLD, aes(Time,Pressure_rho), method="loess", se=FALSE, span=0.1, colour="white")
 
 
 # facet plot using patchwork package

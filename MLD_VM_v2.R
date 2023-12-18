@@ -28,18 +28,24 @@ unique_time <- unique(data_tibble$DateTime)
 # Loop through each profile time and compute the mixed layer depth
 
 for (ut in unique_time) {
-  Press_subset <- subset(data_tibble$WaterDepth,  data_tibble$DateTime == ut & data_tibble$WaterDepth> -190 & data_tibble$WaterDepth< -10)
-  Tmp_subset <- subset(data_tibble$Temperature, data_tibble$DateTime == ut & data_tibble$WaterDepth> -190 & data_tibble$WaterDepth< -10)
-  SigmaT_subset <- subset(data_tibble$Density, data_tibble$DateTime == ut & data_tibble$WaterDepth> -190 & data_tibble$WaterDepth< -10)
-  criterion_T <- 0.1
+  # subset for the -20 to 0 m layer average as per Dong et al 2008
+  Tmp_subset <- subset(data_tibble$Temperature, data_tibble$DateTime == ut & data_tibble$WaterDepth> -20 & data_tibble$WaterDepth< 0)
+  tave_0to20 <- mean(Tmp_subset, na.rm = TRUE)
+  SigmaT_subset <- subset(data_tibble$Density, data_tibble$DateTime == ut & data_tibble$WaterDepth> -20 & data_tibble$WaterDepth< 0)
+  sigmatave_0to20 <- mean(SigmaT_subset, na.rm = TRUE)
+  # subset from -190 to -20 which will be used for the delta 0.03 kg/m3 change criteria test
+  Press <- subset(data_tibble$WaterDepth, data_tibble$DateTime == ut)
+  Tmp <- subset(data_tibble$Temperature, data_tibble$DateTime == ut)
+  SigmaT <- subset(data_tibble$Density, data_tibble$DateTime == ut)
+  criterion_T <- 0.2
 #  criterion_rho <- 0.125 # Kelley 2008
   criterion_rho <- 0.03 # Dong et al 2008
-  inMLD_T <- abs(Tmp_subset[1]-Tmp_subset) < criterion_T
-  MLDindex_T <- which.min(inMLD_T)
-  MLDpressure_T <- Press_subset[MLDindex_T]
-  inMLD_rho <- abs(SigmaT_subset[1]-SigmaT_subset) < criterion_rho
-  MLDindex_rho <- which.min(inMLD_rho)
-  MLDpressure_rho <- Press_subset[MLDindex_rho]
+  inMLD_T <- abs(tave_0to20-Tmp) > criterion_T
+  MLDindex_T <- which.max(inMLD_T[10:length(inMLD_T)])
+  MLDpressure_T <- Press[MLDindex_T+10]
+  inMLD_rho <- abs(sigmatave_0to20-SigmaT) > criterion_rho
+  MLDindex_rho <- which.max(inMLD_rho[10:length(inMLD_rho)])
+  MLDpressure_rho <- Press[MLDindex_rho+10]
   # there seem to be cases where the density criterion is not met through the whole water column
   if (MLDpressure_rho>150){
     MLDpressure_rho <- NA

@@ -30,8 +30,8 @@ pSal_VM <- ggplot() +
   scale_x_continuous(breaks = c(as.POSIXct("2012-01-22", tz = "UTC"), as.POSIXct("2012-01-23", tz = "UTC"), as.POSIXct("2012-01-24", tz = "UTC"), as.POSIXct("2012-01-25", tz = "UTC"), as.POSIXct("2012-01-26", tz = "UTC")),
                      labels = c("Jan 22", "Jan 23", "Jan 24", "Jan 25", "Jan 26"), limits = c(as.POSIXct("2012-01-21 04:00:00", tz = "UTC"), as.POSIXct("2012-01-26 21:00:00", tz = "UTC"))) +
   scale_y_continuous(limits = c(-200, 0), breaks = c(-200, -150, -100, -50, 0), labels = c("200", "150", "100", "50", "0")) +
-  #geom_smooth(data=MLD_df, aes(unique_time,MLD_VM), method="loess", se=FALSE, span=0.1, colour="white") +
-  geom_line(data=MLD_df, aes(unique_time,MLD_VM), colour="white", linewidth = 1)
+  geom_smooth(data=MLD_df, aes(unique_time,MLD_VM), method="loess", se=FALSE, span=0.1, colour="white", linewidth = 0.5)
+  #geom_line(data=MLD_df, aes(unique_time,MLD_VM), colour="white", linewidth = 1)
 
 
 pTmp <- ggplot(tidy_SH, aes(Time, Pressure)) +
@@ -53,10 +53,10 @@ pSal <- ggplot(tidy_SH, aes(Time, Pressure)) +
   scale_x_continuous(breaks = c(as.POSIXct("2012-01-22", tz = "UTC"), as.POSIXct("2012-01-23", tz = "UTC"), as.POSIXct("2012-01-24", tz = "UTC"), as.POSIXct("2012-01-25", tz = "UTC"), as.POSIXct("2012-01-26", tz = "UTC")),
                      labels = c("","","","",""), limits = c(as.POSIXct("2012-01-21 04:00:00", tz = "UTC"), as.POSIXct("2012-01-26 21:00:00", tz = "UTC"))) +
   # labels = c("Jan 22", "Jan 23", "Jan 24", "Jan 25", "Jan 26"), limits = c(as.POSIXct("2012-01-21 04:00:00", tz = "UTC"), as.POSIXct("2012-01-26 21:00:00", tz = "UTC"))) +
-  geom_smooth(data=tidy_MLD, aes(Time,Pressure_rho), method="loess", se=FALSE, span=0.1, colour="white", linewidth = 1)
+  geom_smooth(data=tidy_MLD, aes(Time,Pressure_rho), method="loess", se=FALSE, span=0.1, colour="white", linewidth = 0.5)
 
 
 # facet plot using patchwork package
-# pTmp/pTmp_VM/pSal/pSal_VM
+# pWind/pTmp/pTmp_VM/pSal/pSal_VM
 
 # ggsave(filename = "SH_VM_CTD.png", device = "png", scale = 1, width = 6, height = 6, units = "in", dpi = 1200)

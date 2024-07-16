@@ -28,7 +28,7 @@ colors <- c("ERA" = "red", "NBP" = "black")
 pWind <- ggplot() +
   geom_line(data = WS_ERA, aes(x=date_ERA,y=Wind_ERA,color="ERA"), linewidth = 1.0) +
   geom_line(data = WS_NBP, aes(x=date_NBP,y=Wind_NBP,color="NBP"), linewidth = 1.0) +
-  labs(x=NULL, y="Wind (m/s)", color = NULL) +
+  labs(x=NULL, y=expression(paste("Wind (m ", s^-1, ")")), color = NULL) +
   scale_color_manual(values = colors) +
   scale_x_continuous(breaks = c(as.POSIXct("2012-01-22", tz = "UTC"), as.POSIXct("2012-01-23", tz = "UTC"), as.POSIXct("2012-01-24", tz = "UTC"), as.POSIXct("2012-01-25", tz = "UTC"), as.POSIXct("2012-01-26", tz = "UTC")),
                      labels = c("", "", "", "", ""), limits = c(as.POSIXct("2012-01-21 04:00:00", tz = "UTC"), as.POSIXct("2012-01-26 21:00:00", tz = "UTC")))
